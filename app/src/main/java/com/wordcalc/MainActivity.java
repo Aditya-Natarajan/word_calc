@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnZero).setOnClickListener(this::onClickNumbers);
         findViewById(R.id.btnSign).setOnClickListener(this::onClickNumbers);
 
+        findViewById(R.id.btnSign).setOnClickListener(this::onClickNumbers);
+
         findViewById(R.id.btnMultiply).setOnClickListener(this::onClickNumbers);
         findViewById(R.id.btnPlus).setOnClickListener(this::onClickNumbers);
         findViewById(R.id.btnMinus).setOnClickListener(this::onClickNumbers);
@@ -68,6 +72,30 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnMinus).setOnClickListener(this::onClickNumbers);
         findViewById(R.id.btnDivide).setOnClickListener(this::onClickNumbers);
 
+        findViewById(R.id.btnHundred).setOnClickListener(this::onClickNumbers);
+        findViewById(R.id.btnHundred1).setOnClickListener(this::onClickNumbers);
+        findViewById(R.id.btnThousand).setOnClickListener(this::onClickNumbers);
+        findViewById(R.id.btnThousand1).setOnClickListener(this::onClickNumbers);
+        findViewById(R.id.btnLac).setOnClickListener(this::onClickNumbers);
+        findViewById(R.id.btnCrore).setOnClickListener(this::onClickNumbers);
+        findViewById(R.id.btnMillion).setOnClickListener(this::onClickNumbers);
+        findViewById(R.id.btnBillion).setOnClickListener(this::onClickNumbers);
+        findViewById(R.id.btnTrillion).setOnClickListener(this::onClickNumbers);
+
+        RadioGroup rgMul = findViewById(R.id.rgMul);
+        LinearLayout llIndMul = findViewById(R.id.llIndMul);
+        LinearLayout llUsMul = findViewById(R.id.llUsMul);
+        llUsMul.setVisibility(View.GONE);
+
+        rgMul.setOnCheckedChangeListener((radioGroup, iCheckedId) -> {
+            if (iCheckedId == R.id.rbInd) {
+                llUsMul.setVisibility(View.GONE);
+                llIndMul.setVisibility(View.VISIBLE);
+            } else if (iCheckedId == R.id.rbUsa) {
+                llUsMul.setVisibility(View.VISIBLE);
+                llIndMul.setVisibility(View.GONE);
+            }
+        });
 
         initInputNumber();
     }
@@ -103,6 +131,24 @@ public class MainActivity extends AppCompatActivity {
             etInputNumbers.setText("+");
         } else if (btnId == R.id.btnDecimal) {
             etInputNumbers.setText(".");
+        } else if (btnId == R.id.btnHundred) {
+            setInputNumber("00");
+        } else if (btnId == R.id.btnHundred1) {
+            setInputNumber("00");
+        } else if (btnId == R.id.btnThousand) {
+            setInputNumber("000");
+        } else if (btnId == R.id.btnThousand1) {
+            setInputNumber("000");
+        } else if (btnId == R.id.btnLac) {
+            setInputNumber("00000");
+        } else if (btnId == R.id.btnCrore) {
+            setInputNumber("0000000");
+        } else if (btnId == R.id.btnMillion) {
+            setInputNumber("000000");
+        } else if (btnId == R.id.btnBillion) {
+            setInputNumber("000000000");
+        } else if (btnId == R.id.btnTrillion) {
+            setInputNumber("00000000000");
         } else {
             Log.d("onClick", "Clicked : " + btnId);
             etInputNumbers.setText("?");
@@ -118,14 +164,27 @@ public class MainActivity extends AppCompatActivity {
     private void setInputNumber(String sKey) {
         DebugLog.logTrace();
         if (StringUtils.containsAny(sKey, "0123456789")) {
+            if (isOnlyZeros(sInputNumber) && isOnlyZeros(sKey)) {
+                return;
+            }
             if (sInputNumber.contentEquals("0")) {
                 sInputNumber = sKey;
             } else {
-                sInputNumber += sKey;
+                    sInputNumber += sKey;
             }
             etInputNumbers.setText(sInputNumber);
             setWordNumber();
         }
+    }
+
+    private boolean isOnlyZeros(String sInp) {
+        for (char character : sInp.toCharArray()) {
+
+            if (character != '0') {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void delLastInputNumber() {
